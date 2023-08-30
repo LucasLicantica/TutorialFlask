@@ -14,14 +14,16 @@ def register():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
+        verificarContra = request.form['password2']
         db = get_db()
         error = None
 
         if not username:
-            error = 'Username is required.'
+            error = 'Se requiere Nombre de Usuario.'
         elif not password:
-            error = 'Password is required.'
-
+            error = 'Se requiere Contraseña.'
+        elif not verificarContra == password:
+            error = 'Se requiere VerificarContra.'
         if error is None:
             try:
                 db.execute(
@@ -50,9 +52,9 @@ def login():
         ).fetchone()
 
         if user is None:
-            error = 'Incorrect username.'
+            error = 'Nombre de usuario Incorrecto.'
         elif not check_password_hash(user['password'], password):
-            error = 'Incorrect password.'
+            error = 'Contraseña incorrecta.'
 
         if error is None:
             session.clear()
